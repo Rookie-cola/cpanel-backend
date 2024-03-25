@@ -1,14 +1,10 @@
-import time
-
-from flask import request, jsonify
-from flask_login import login_user, logout_user
-
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-
+from flask import request, jsonify
 from decorators import auth
 from dictionary.http_dict import login_dict
 from FlaskAppSingleton import FlaskAppSingleton
 from models import Users, Tokens
+import time
 
 app = FlaskAppSingleton().get_app()
 db = FlaskAppSingleton().get_db()

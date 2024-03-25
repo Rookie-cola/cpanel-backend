@@ -1,7 +1,10 @@
 import time
 
 from FlaskAppSingleton import FlaskAppSingleton
+
 db = FlaskAppSingleton().get_db()
+
+
 class Tokens(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))

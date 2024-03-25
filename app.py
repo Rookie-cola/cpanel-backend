@@ -1,27 +1,16 @@
-from flask_login import LoginManager
+from flask import request, jsonify
 
+from api.v1.docker_manager import docker
 from auth import logout, login
 from decorators import auth
 from FlaskAppSingleton import FlaskAppSingleton
-from models import Users
+from config import config
 
 from api.v1.system import system
-
+from api.v1.ufw_manager import ufw
 
 app = FlaskAppSingleton().get_app()
-app.config['SECRET_KEY'] = 'test'
-
-# 初始化登录管理器
-
-username = 'admin'
-password = 'admin'
-
-
-@app.route('/')
-def hello_world():  # put application's code here
-    return 'Hello World!'
-
-
+app.config['SECRET_KEY'] = config.SECRET_KEY
 
 
 # 路由注册
@@ -37,6 +26,8 @@ def handle_logout():
 
 
 app.register_blueprint(system, url_prefix='/api/v1/system')
+app.register_blueprint(ufw, url_prefix='/api/v1/ufw')
+app.register_blueprint(docker, url_prefix='/api/v1/docker')
 
 if __name__ == '__main__':
     app.run(debug=True)
