@@ -1,7 +1,5 @@
 import os
-
 from sqlalchemy.exc import IntegrityError
-
 from FlaskAppSingleton import FlaskAppSingleton
 from models.ufw_ip import ufw_ip
 from models.ufw_port import ufw_port
@@ -78,7 +76,7 @@ class IPManager:
         os.system("sudo ufw delete deny from {} proto {}".format(self.ip, self.protocol))
 
 
-if __name__ == '__main__':
-    # IPManager('192.168.1.1', 'tcp').add_deny_ip('test')
-    # print(IPManager.get_deny_ip())
-    IPManager('192.168.1.1', 'tcp').delete_deny_ip()
+# if __name__ == '__main__':
+#     # IPManager('192.168.1.1', 'tcp').add_deny_ip('test')
+#     # print(IPManager.get_deny_ip())
+#     IPManager('192.168.1.1', 'tcp').delete_deny_ip()

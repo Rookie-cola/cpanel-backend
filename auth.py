@@ -17,7 +17,6 @@ def generate_token(user_id, user_name):
     token = None
     try:
         token = s.dumps({"id": user_id, "name": user_name}).decode("ascii")
-        # insert token into database here
         token_obj = Tokens(user_id, token, expires_at)
         db.session.add(token_obj)
         db.session.commit()

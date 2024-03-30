@@ -15,4 +15,3 @@ class ufw_port(db.Model):
         self.port = port
         self.protocol = protocol
         self.description = description
-
