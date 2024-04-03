@@ -11,7 +11,6 @@ db = FlaskAppSingleton().get_db()
 
 
 def generate_token(user_id, user_name):
-    # generate a token here
     expires_at = int(time.time()) + 60 * 60 * 24 * 30  # 30 days
     s = Serializer(app.config['SECRET_KEY'], expires_in=60 * 60 * 24 * 30)
     token = None
@@ -20,7 +19,6 @@ def generate_token(user_id, user_name):
         token_obj = Tokens(user_id, token, expires_at)
         db.session.add(token_obj)
         db.session.commit()
-
         app.logger.info("获取token成功:{}".format(token))
     except Exception as e:
         app.logger.error("获取token失败:{}".format(e))

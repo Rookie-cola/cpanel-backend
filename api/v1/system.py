@@ -33,30 +33,41 @@ def get_system_info():
                 'percent': usage.percent,
                 'fstype': partition.fstype
             }
+    # 获取网卡信息
+    interfaces = {}
+    for interface, addrs in psutil.net_if_addrs().items():
+        for addr in addrs:
+            interfaces[interface] = {
+                'mac': addr.address,
+                'netmask': addr.netmask,
+                'broadcast': addr.broadcast,
+                'bytes_sent': psutil.net_io_counters(pernic=True)[interface].bytes_sent,
+                'bytes_recv': psutil.net_io_counters(pernic=True)[interface].bytes_recv,
+                'packets_sent': psutil.net_io_counters(pernic=True)[interface].packets_sent,
+                'packets_recv': psutil.net_io_counters(pernic=True)[interface].packets_recv,
+            }
     # 获取系统信息
     system_info = {
         # 系统运行时间
         'sys_uptime': str(system_uptime),
         # CPU使用率
-        'cpu_times': {
-            'user': psutil.cpu_times().user,
-            'system': psutil.cpu_times().system,
-            'idle': psutil.cpu_times().idle,
-            'nice': psutil.cpu_times().nice,
-            'iowait': psutil.cpu_times().iowait,
-            'irq': psutil.cpu_times().irq,
-            'softirq': psutil.cpu_times().softirq,
-            'steal': psutil.cpu_times().steal,
-            'guest': psutil.cpu_times().guest,
-            'guest_nice': psutil.cpu_times().guest_nice
+        'cpu_percent': psutil.cpu_percent(),
+        # CPU信息
+        'cpu_info': {
+            'count': psutil.cpu_count(),
+            'cores': psutil.cpu_count(logical=False),
+            'freq': psutil.cpu_freq().current,
+            'percent': psutil.cpu_percent(percpu=True)
         },
         # 内存使用率
-        'virtual_memory': {
-            'total': str(round(psutil.virtual_memory().total / (1024.0 ** 3))) + " GB",
-            'available': str(round(psutil.virtual_memory().available / (1024.0 ** 3))) + " GB",
-            'percent': psutil.virtual_memory().percent,
+        'memory_percent': {
             'used': str(round(psutil.virtual_memory().used / (1024.0 ** 3))) + " GB",
-            'free': str(round(psutil.virtual_memory().free / (1024.0 ** 3))) + " GB"
+            'free': str(round(psutil.virtual_memory().free / (1024.0 ** 3))) + " GB",
+            'percent': psutil.virtual_memory().percent
+        },
+        "network_info": {
+            "hostname": platform.node(),
+            "interfaces": interfaces
         },
         # 主机名称
         'hostname': platform.node(),
@@ -64,8 +75,6 @@ def get_system_info():
         'platform': platform.system(),
         # 处理器架构信息
         'architecture': platform.machine(),
-        # CPU数量
-        'platform_release': platform.release(),
         # 内核版本信息
         'platform_version': platform.version(),
         'processor': platform.processor(),

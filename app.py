@@ -1,5 +1,4 @@
 from flask import request, jsonify
-
 from auth import logout, login
 from decorators import auth
 from FlaskAppSingleton import FlaskAppSingleton

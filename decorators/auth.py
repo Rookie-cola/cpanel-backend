@@ -1,8 +1,6 @@
 import functools
-
 from flask import request, jsonify
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-
 from models import Tokens
 
 

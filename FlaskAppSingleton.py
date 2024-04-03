@@ -1,6 +1,4 @@
-# singleton.py
 import threading
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import os
