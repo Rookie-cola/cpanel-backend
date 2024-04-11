@@ -3,8 +3,8 @@ from decorators import auth
 from FlaskAppSingleton import FlaskAppSingleton
 from functions.ufw_manager import PortManager, IPManager
 
-app = FlaskAppSingleton().get_app()
 
+app = FlaskAppSingleton().get_app()
 ufw = Blueprint('ufw', __name__)
 
 

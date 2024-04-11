@@ -8,6 +8,7 @@ app = FlaskAppSingleton().get_app()
 docker = Blueprint('docker', __name__)
 
 
+# TODO: 增加获取docker版本的功能
 @docker.route('/version', endpoint="handle_docker_version", methods=['GET'])
 @auth.login_required
 def handle_docker_version():
@@ -18,6 +19,7 @@ def handle_docker_version():
         return jsonify({'message': 'Invalid request method.'}), 405
 
 
+# TODO: 增加删除镜像的功能
 @docker.route('/remove_images', endpoint="handle_docker_remove_images", methods=['POST'])
 @auth.login_required
 def handle_docker_remove_images():
@@ -31,6 +33,7 @@ def handle_docker_remove_images():
             return jsonify({'message': 'Invalid request data.'}), 400
 
 
+# TODO: 增加拉取镜像的功能
 @docker.route('/pull_images', endpoint="handle_docker_pull_images", methods=['POST'])
 @auth.login_required
 def handle_docker_pull_images():
@@ -45,6 +48,7 @@ def handle_docker_pull_images():
             return jsonify({'message': 'Invalid request data.'}), 400
 
 
+# TODO: 增加获取镜像列表的功能
 @docker.route('/images_list', endpoint="handle_docker_images_list", methods=['GET'])
 @auth.login_required
 def handle_docker_images_list():
@@ -56,15 +60,13 @@ def handle_docker_images_list():
             if image:
                 image_info = image.split('   ')
                 image_list.append({
-                   'repository': image_info[0],
+                    'repository': image_info[0],
                     'tag': image_info[1],
                     'id': image_info[2],
                     'created': image_info[3],
-                   'size': image_info[4]
+                    'size': image_info[4]
                 })
 
         return jsonify({'images': image_list})
     else:
         return jsonify({'message': 'Invalid request method.'}), 405
-
-
