@@ -10,7 +10,6 @@ class SingletonMeta(type):
 
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:
-            # Ensure we are safe from race conditions in multi-threaded environments
             with cls._instances_lock:
                 if cls not in cls._instances:
                     instance = super().__call__(*args, **kwargs)

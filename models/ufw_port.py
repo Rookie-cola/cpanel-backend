@@ -3,7 +3,7 @@ from FlaskAppSingleton import FlaskAppSingleton
 db = FlaskAppSingleton().get_db()
 
 
-class ufw_port(db.Model):
+class UfwPort(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     port = db.Column(db.String(512), nullable=False)
     protocol = db.Column(db.String(512), nullable=False)

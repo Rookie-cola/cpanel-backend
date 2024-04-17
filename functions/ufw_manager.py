@@ -1,10 +1,12 @@
 import subprocess
 from sqlalchemy.exc import IntegrityError
 from FlaskAppSingleton import FlaskAppSingleton
-from models.ufw_ip import ufw_ip
-from models.ufw_port import ufw_port
+from models.ufw_ip import UfwIp
+from models.ufw_port import UfwPort
 
 db = FlaskAppSingleton().get_db()
+ufw_port = UfwPort
+ufw_ip = UfwIp
 
 
 class PortManager:
@@ -57,10 +59,10 @@ class PortManager:
                 new_port = ufw_port(port=self.port, protocol=self.protocol, description=self.description,
                                     is_allowed=self.is_allowed)
                 db.session.add(new_port)
-                db.session.commit()
                 # 执行相应的UFW命令
                 result = subprocess.run(command, shell=True, check=False)
                 if result.returncode == 0:
+                    db.session.commit()
                     return True, "端口添加成功"
                 else:
                     db.session.rollback()  # 如果UFW命令执行失败，回滚数据库操作
@@ -137,11 +139,11 @@ class IPManager:
                 ufw_ip_obj = ufw_ip(ip=self.ip, protocol=self.protocol, description=self.description,
                                     is_allowed=self.is_allowed)
                 db.session.add(ufw_ip_obj)
-                db.session.commit()
             # 构建并执行UFW命令
             command = ["sudo", "ufw", action, "from", self.ip, "proto", self.protocol]
             result = subprocess.run(command, check=False)
             if result.returncode == 0:
+                db.session.commit()
                 return True, "地址添加成功"
             else:
                 # 如果UFW命令执行失败，回滚数据库操作

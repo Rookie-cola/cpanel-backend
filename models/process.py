@@ -16,8 +16,8 @@ class ProcessManager:
                 process.append({
                     "pid": i,
                     "proc_name": proc.name(),
-                    "mem": round(proc.cpu_percent(), 2),
-                    "cpu": round(proc.memory_percent(), 2),
+                    "cpu": round(proc.cpu_percent(), 2),
+                    "mem": round(proc.memory_percent(), 2),
                     "status": proc.status()
                 })
         return process
@@ -30,8 +30,8 @@ class ProcessManager:
         proc = psutil.Process(self.pid)
         return {
             "proc_name": proc.name(),
-            "mem": round(proc.cpu_percent(), 2),
-            "cpu": round(proc.memory_percent(), 2),
+            "cpu": round(proc.cpu_percent(), 2),
+            "mem": round(proc.memory_percent(), 2),
             "status": proc.status(),
-            "cmdline": " ".join(proc.cmdline())
+            # "cmdline": " ".join(proc.cmdline())
         }

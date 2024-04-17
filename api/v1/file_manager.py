@@ -1,6 +1,6 @@
 import os
 import flask
-from flask import request, jsonify, Blueprint, send_file
+from flask import request, jsonify, Blueprint
 from decorators import auth
 from FlaskAppSingleton import FlaskAppSingleton
 from models.file import FileManager
@@ -11,7 +11,7 @@ file = Blueprint('file', __name__)
 
 @file.route('/file_list', endpoint='file_list', methods=['GET'])
 @auth.login_required
-def show_file_list():
+def show_file_list():  # 显示文件列表
     try:
         path = request.args.get('path', '/')  # 若未提供路径，默认为根目录 '/'
         file_manager = FileManager(path)

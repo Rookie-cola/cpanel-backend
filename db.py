@@ -7,12 +7,12 @@ conn = sqlite3.connect('database.db')
 # Creating a cursor object
 cursor = conn.cursor()
 
-# 创建一个users的表
+
 cursor.execute('''CREATE TABLE IF NOT EXISTS users
                  (id INTEGER PRIMARY KEY AUTOINCREMENT,
                  username VARCHAR(32) UNIQUE NOT NULL,
                  password VARCHAR(32) NOT NULL)''')
-# 创建一个Token表
+
 cursor.execute('''CREATE TABLE IF NOT EXISTS tokens
                  (id INTEGER PRIMARY KEY AUTOINCREMENT,
                  token VARCHAR(512) UNIQUE NOT NULL,
@@ -36,8 +36,15 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS ufw_port
                  is_allowed BOOLEAN NOT NULL)''')
 
 
+# 创建一个nginx表
+cursor.execute('''CREATE TABLE IF NOT EXISTS nginx
+                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                 name VARCHAR(128) UNIQUE NOT NULL,
+                 port INTEGER NOT NULL)''')
+
+
 # 插入数据
-# cursor.execute("INSERT INTO users (username, password) VALUES (?,?)", ('admin', 'admin'))
+# cursor.execute("INSERT INTO users (username, password) VALUES (?,?)", ('admin', 'admin1234'))
 
 # 提交事务
 conn.commit()
