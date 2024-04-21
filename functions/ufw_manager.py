@@ -17,8 +17,33 @@ class PortManager:
         self.is_allowed = is_allowed
 
     @staticmethod
-    def get_port():
-        ports = ufw_port.query.all()
+    def delete_port_by_id(rule_id):
+        port_obj = ufw_port.query.filter_by(id=rule_id)
+        if port_obj.first() is None:
+            return False, "端口不存在"
+        action = "allow" if port_obj.first().is_allowed else "deny"
+        command = f"sudo ufw delete {action} {port_obj.first().port}/{port_obj.first().protocol}"
+        result = subprocess.run(command, shell=True, check=False)
+        port_obj.delete()
+        if result.returncode == 0:
+            db.session.commit()
+            return True, "端口删除成功"
+        else:
+            db.session.rollback()
+            return False, "执行ufw命令失败"
+
+
+
+
+
+
+
+
+
+
+    @staticmethod
+    def get_port(page=1, limit=10):
+        ports = ufw_port.query.paginate(page=page, per_page=limit, error_out=False)
         result = []
         for port in ports:
             result.append({
@@ -103,6 +128,22 @@ class IPManager:
         self.protocol = protocol
         self.description = description
         self.is_allowed = is_allowed
+
+    @staticmethod
+    def delete_ip_by_id(rule_id):
+        ip_obj = ufw_ip.query.filter_by(id=rule_id)
+        if ip_obj.first() is None:
+            return False, "地址不存在"
+        action = "allow" if ip_obj.first().is_allowed else "deny"
+        command = ["sudo", "ufw", "delete", action, "from", ip_obj.first().ip, "proto", ip_obj.first().protocol]
+        result = subprocess.run(command, check=False)
+        ip_obj.delete()
+        if result.returncode == 0:
+            db.session.commit()  # 只有在UFW命令执行成功后才提交数据库更改
+            return True, "地址删除成功"
+        else:
+            db.session.rollback()  # UFW命令执行失败，回滚数据库操作
+            return False, "执行ufw命令失败"
 
     @staticmethod
     def get_ip():

@@ -4,7 +4,7 @@ from time import sleep
 from models import ProcessManager
 
 
-class SystemWatch:    # 系统监控类
+class SystemWatch:  # 系统监控类
     def __init__(self):
         pass
 
@@ -66,8 +66,8 @@ class SystemWatch:    # 系统监控类
         for i in psutil.net_connections():
             if i.status == 'ESTABLISHED':
                 result.append(ProcessManager(i.pid).get_process())
-                result[-1]["laddr_ip"] = i.laddr.ip
-                result[-1]["laddr_port"] = i.laddr.port
-                result[-1]["raddr_ip"] = i.raddr.ip
-                result[-1]["raddr_port"] = i.raddr.port
+                # result[-1]["laddr_ip"] = i.laddr.ip
+                # result[-1]["laddr_port"] = i.laddr.port
+                # result[-1]["raddr_ip"] = i.raddr.ip
+                # result[-1]["raddr_port"] = i.raddr.port
         return result

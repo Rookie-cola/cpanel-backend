@@ -1,9 +1,29 @@
 import contextlib
+import json
 import os
 import subprocess
-from typing import List
-from file import FileManager
+from typing import List, Dict, Any
+from flask import jsonify, Response
+
+from FlaskAppSingleton import FlaskAppSingleton
+from models import FileManager
 from functions.sql_func import execute
+db = FlaskAppSingleton().get_db()
+
+
+class WebSite(db.Model):
+    __tablename__ = 'nginx'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(512), nullable=False)
+    port = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, id, name, port):
+        self.id = id
+        self.name = name
+        self.port = port
+
+
+web_site = WebSite
 
 
 class NginxManager:
@@ -22,7 +42,7 @@ class NginxManager:
         self._reload_nginx()
 
         try:
-            execute('DELETE FROM nginx WHERE name = ?', (self.name,))
+            web_site.query.filter_by(name=self.name).delete()
         except Exception as e:
             print(f"Error deleting record from database: {e}")
 
@@ -34,18 +54,28 @@ class NginxManager:
         with open(os.devnull, 'w') as devnull:
             with contextlib.redirect_stdout(devnull), contextlib.redirect_stderr(devnull):
                 log = subprocess.check_output(
-                    ['sh', 'script/create_website.sh', self.name, str(port)]
+                    ['sh', 'scripts/create_website.sh', self.name.replace(".zip", ""), str(port)]
                 )
                 print(log.decode().strip())
 
-        try:
-            execute('INSERT INTO nginx (name, port) VALUES (?, ?)', (self.name, port))
-        except Exception as e:
-            print(f"Error inserting record into database: {e}")
+        # try:
+        #     execute('INSERT INTO nginx (name, port) VALUES (?, ?)', (self.name, port))
+        # except Exception as e:
+        #     print(f"Error inserting record into database: {e}")
 
     @staticmethod
-    def get_web_list() -> List[dict]:
-        return execute('SELECT * FROM nginx')
+    def get_web_list():
+        # 从数据库中获取网站列表
+        web_list = web_site.query.all()
+        result = []
+        for web in web_list:
+            result.append({
+                "id": web.id,
+                "name": web.name,
+                "port": web.port
+            })
+        return result
+
 
     def _run_command(self, command: str):
         try:

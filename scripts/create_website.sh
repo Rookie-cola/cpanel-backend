@@ -26,7 +26,7 @@ server {
 
 
 # 3. 解压网站压缩包
-unzip /tmp/$1.zip -d /var/www/nginx
+unzip /tmp/$1.zip -d /var/www/nginx/$1
 
 # 4. 重启服务
 sudo nginx -s reload

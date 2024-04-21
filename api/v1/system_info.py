@@ -3,7 +3,6 @@ from flask import jsonify, Blueprint
 from decorators import auth
 import time, datetime
 import psutil
-import platform
 from functions import SystemWatch
 
 # 获取flask app实例

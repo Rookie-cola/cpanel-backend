@@ -16,6 +16,7 @@ def process_api():
             return jsonify(SystemWatch.get_netstat_info()), 200
         except Exception as e:
             return jsonify({'error': 'Failed to get processes', 'details': str(e)}), 500
+
     elif request.method == 'DELETE':
         pid = request.form.get('pid')
         if not pid:

@@ -8,6 +8,10 @@ app = FlaskAppSingleton().get_app()
 ufw = Blueprint('ufw', __name__)
 
 
+
+
+
+
 @ufw.route('/port', endpoint="handle_ufw_port", methods=['GET', 'POST', 'DELETE'])
 @auth.login_required
 def handle_ufw_port():
@@ -17,24 +21,26 @@ def handle_ufw_port():
     description = request.form.get('description')
 
     if request.method == 'GET':
-        ports = PortManager.get_port()
+        page = request.args.get('page', 1, type=int)
+        limit = request.args.get('limit', 1, type=int)
+        ports = PortManager.get_port(page=page, limit=limit)
         if not ports:
             return jsonify({"status": False, "msg": "暂无端口数据"})
-        return jsonify(PortManager.get_port())
+        return jsonify(ports)
 
     else:  # 处理非 GET 请求（POST、DELETE）
-        if is_allowed_str is None or is_allowed_str == "":
-            return jsonify({"status": False, "msg": "'is_allowed' 字段不能为空"})
-
-        is_allowed = is_allowed_str.lower() in ['true', '1']
-
         if request.method == 'POST':
+            if is_allowed_str is None or is_allowed_str == "":
+                return jsonify({"status": False, "msg": "'is_allowed' 字段不能为空"})
+
+            is_allowed = is_allowed_str.lower() in ['true', '1']
             port_manager = PortManager(port=port, protocol=protocol, description=description, is_allowed=is_allowed)
             status, msg = port_manager.add_port()
             return jsonify({"status": status, "msg": msg})
         elif request.method == 'DELETE':
-            port_manager = PortManager(port=port, protocol=protocol, description=description, is_allowed=is_allowed)
-            status, msg = port_manager.delete_port()
+            if request.args.get('rule_id') is None:
+                return jsonify({"status": False, "msg": "rule_id 不能为空"})
+            status, msg = PortManager.delete_port_by_id(request.args.get('rule_id'))
             return jsonify({"status": status, "msg": msg})
 
 
@@ -52,16 +58,16 @@ def handle_ufw_ip():
             return jsonify({"status": False, "msg": "暂无地址数据"})
         return jsonify(IPManager.get_ip())
     else:  # 处理非 GET 请求（POST、DELETE）
-        if is_allowed_str is None or is_allowed_str == "":
-            return jsonify({"status": False, "msg": "'is_allowed' 字段不能为空"})
-
-        is_allowed = is_allowed_str.lower() in ['true', '1']
-
         if request.method == 'POST':
+            if is_allowed_str is None or is_allowed_str == "":
+                return jsonify({"status": False, "msg": "'is_allowed' 字段不能为空"})
+
+            is_allowed = is_allowed_str.lower() in ['true', '1']
             ip_manager = IPManager(ip=ip, protocol=protocol, description=description, is_allowed=is_allowed)
             status, msg = ip_manager.add_ip()
             return jsonify({"status": status, "msg": msg})
         elif request.method == 'DELETE':
-            ip_manager = IPManager(ip=ip, protocol=protocol, description=description, is_allowed=is_allowed)
-            status, msg = ip_manager.delete_ip()
+            if request.args.get('rule_id') is None:
+                return jsonify({"status": False, "msg": "rule_id 不能为空"})
+            status, msg = IPManager.delete_ip_by_id(request.args.get('rule_id'))
             return jsonify({"status": status, "msg": msg})
