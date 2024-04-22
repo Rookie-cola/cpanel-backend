@@ -8,10 +8,6 @@ app = FlaskAppSingleton().get_app()
 ufw = Blueprint('ufw', __name__)
 
 
-
-
-
-
 @ufw.route('/port', endpoint="handle_ufw_port", methods=['GET', 'POST', 'DELETE'])
 @auth.login_required
 def handle_ufw_port():

@@ -9,8 +9,11 @@ def login_required(view_func):
 
     def verify_token(*arg, **kwargs):
         try:
-            # 在请求头上拿到token
-            token = request.headers["Authorization"].replace("Bearer ", "")
+            if request.args.get('token') is not None:
+                token = request.args.get('token')
+                # 在请求头上拿到token
+            else:
+                token = request.headers["Authorization"].replace("Bearer ", "")
         except Exception as e:
             # 没接收的到token,给前端抛出错误
             return jsonify(code=101, msg='缺少参数token')

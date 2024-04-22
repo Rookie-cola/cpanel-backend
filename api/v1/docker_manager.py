@@ -71,3 +71,14 @@ def handle_docker_remove_images():
             return jsonify({'message': 'Images removed successfully.'})
         else:
             return jsonify({'message': 'Invalid request data.'}), 400
+
+
+@docker.route('/run_images', endpoint="handle_docker_run_images", methods=['POST'])
+@auth.login_required
+def handle_docker_run_images():
+    if request.method == 'POST':
+        if 'image' in request.form and 'port' in request.form:
+            image = request.form.get('image')
+            port = request.form.get('port')
+            os.system(f'docker run -d -p {port}:{port} {image}')
+            return jsonify({'message': 'Image run successfully.'})

@@ -13,10 +13,13 @@ file = Blueprint('file', __name__)
 @auth.login_required
 def show_file_list():  # 显示文件列表
     try:
-        path = request.args.get('path', '/')  # 若未提供路径，默认为根目录 '/'
+        path = request.args.get('path', '/')  # 默认路径为根目录
         file_manager = FileManager(path)
         file_list = file_manager.get_file_list()
-        return jsonify({"file": file_list})
+        # 如果路径不存在，则返回404
+        if not os.path.exists(path):
+            return jsonify({"code": 404, "msg": "Path not found", "data": []})
+        return jsonify({"code": 200, "msg": "success", "data": file_list})
     except Exception as e:
         print(f"An error occurred: {e}")
         return jsonify({"error": str(e)}), 500
@@ -35,16 +38,23 @@ def handle_file():
         else:
             return jsonify({"status": "error", "message": "File not found"}), 404
 
-    elif request.method == 'DELETE':
+    if request.method == 'DELETE':
         # 删除文件
-        response = file_manager.delete_file(request.args.get('filename'))
+        response = file_manager.delete_file(request.args.get('path'))
         return jsonify(response)
 
     elif request.method == 'POST':
         # 上传文件
         uploaded_file = request.files.get('file')
+        path = request.args.get('path', '')  # 获取路径
+        if not os.path.exists(path):
+            return jsonify({"status": "error", "message": "Path not found"}), 404
+        if path == '/':
+            return jsonify({"status": "error", "message": "Cannot upload to root directory"}), 403
+        if path == '':
+            return jsonify({"status": "error", "message": "Path not provided"}), 400
         if uploaded_file:
-            response = file_manager.upload(uploaded_file)
+            response = file_manager.upload(uploaded_file, path)
             return jsonify(response)
         else:
             return jsonify({"status": "error", "message": "No file uploaded"}), 400

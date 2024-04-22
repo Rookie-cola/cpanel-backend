@@ -7,6 +7,19 @@ class ProcessManager:
         self.pid = pid
         pass
 
+    # def get_process(self):
+    #     # 此处应实现从pid获取进程详细信息的逻辑
+    #     # 示例代码如下：
+    #     process = psutil.Process(self.pid)
+    #     return {
+    #         'pid': process.pid,
+    #         'process_name': process.name(),
+    #         'username': process.username(),
+    #         'cpu_percent': process.cpu_percent(),
+    #         'memory_percent': round(process.memory_percent() * 1024, 2),
+    #         'status': process.status(),
+    #         # 其他所需信息...
+    #     }
     def get_process(self):
         proc = psutil.Process(self.pid)
         average_cpu_usage = []

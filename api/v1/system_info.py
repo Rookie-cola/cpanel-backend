@@ -22,6 +22,7 @@ system_uptime = datetime.datetime.now() - datetime.datetime.fromtimestamp(psutil
 def get_system_info():
     return jsonify({
         'cpu_info': SystemWatch.get_cpu_info(),
+        'cpu_percent': SystemWatch.get_cpu_percent(),
         'mem_info': SystemWatch.get_mem_info(),
         'disk_info': SystemWatch.get_disk_info(),
         'io_info': SystemWatch.get_io_info()

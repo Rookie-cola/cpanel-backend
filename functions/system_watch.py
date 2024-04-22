@@ -19,6 +19,10 @@ class SystemWatch:  # 系统监控类
         return cpu
 
     @staticmethod
+    def get_cpu_percent():  # 获取CPU使用率
+        return psutil.cpu_percent(interval=1)
+
+    @staticmethod
     def get_mem_info():  # 获取内存信息
         with open('/proc/meminfo') as f:
             mem = {}
