@@ -18,7 +18,8 @@ def handle_ufw_port():
 
     if request.method == 'GET':
         page = request.args.get('page', 1, type=int)
-        limit = request.args.get('limit', 1, type=int)
+        # limit = request.args.get('limit', 1, type=int)
+        limit = 999999
         ports = PortManager.get_port(page=page, limit=limit)
         if not ports:
             return jsonify({"status": False, "msg": "暂无端口数据"})

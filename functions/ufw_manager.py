@@ -90,28 +90,6 @@ class PortManager:
             db.session.rollback()
             return False, "执行ufw命令失败"
 
-    # def delete_port(self):
-    #     port_obj = ufw_port.query.filter_by(port=self.port, protocol=self.protocol, is_allowed=self.is_allowed).first()
-    #     if port_obj is None:
-    #         return False, "端口不存在"
-    #     # 保存删除对象前的状态，以便于执行UFW命令失败时回滚
-    #     port_to_delete = {'port': port_obj.port, 'protocol': port_obj.protocol, 'is_allowed': port_obj.is_allowed}
-    #     db.session.delete(port_obj)
-    #     db.session.commit()
-    #     action = "allow" if port_to_delete['is_allowed'] else "deny"
-    #     command = f"sudo ufw delete {action} {port_to_delete['port']}/{port_to_delete['protocol']}"
-    #     result = subprocess.run(command, shell=True, check=False)
-    #     if result.returncode == 0:
-    #         return True, "端口删除成功"
-    #     else:
-    #         # 因为执行UFW命令失败，所以回滚数据库操作
-    #         # 这里需要重新创建对象并添加到数据库会话中
-    #         port_obj = ufw_port(port=port_to_delete['port'], protocol=port_to_delete['protocol'],
-    #                             is_allowed=port_to_delete['is_allowed'])
-    #         db.session.add(port_obj)
-    #         db.session.commit()
-    #         return False, "执行ufw命令失败"
-
 
 class IPManager:
     def __init__(self, ip, protocol, description, is_allowed):
@@ -185,19 +163,3 @@ class IPManager:
             db.session.rollback()  # UFW命令执行失败，回滚数据库操作
             return False, "执行ufw命令失败"
 
-
-    # def delete_ip(self):
-    #     ip_obj = ufw_ip.query.filter_by(ip=self.ip, protocol=self.protocol, is_allowed=self.is_allowed).first()
-    #     if ip_obj is None:
-    #         return False, "地址不存在"
-    #
-    #     db.session.delete(ip_obj)
-    #     action = "allow" if self.is_allowed else "deny"
-    #     command = ["sudo", "ufw", "delete", action, "from", self.ip, "proto", self.protocol]
-    #     result = subprocess.run(command, check=False)
-    #     if result.returncode == 0:
-    #         db.session.commit()  # 只有在UFW命令执行成功后才提交数据库更改
-    #         return True, "地址删除成功"
-    #     else:
-    #         db.session.rollback()  # UFW命令执行失败，回滚数据库操作
-    #         return False, "执行ufw命令失败"

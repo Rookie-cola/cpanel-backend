@@ -4,15 +4,17 @@ from api.v1.login import login
 from decorators import auth
 from FlaskAppSingleton import FlaskAppSingleton
 from config import config
-from api.v1 import system, ufw, docker, pm, file, web
+from api.v1 import system, ufw, docker_manager, pm, file, web
+
 
 app = FlaskAppSingleton().get_app()
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['SECRET_KEY'] = config.SECRET_KEY
 
+
 app.register_blueprint(system, url_prefix='/api/v1/system')
 app.register_blueprint(ufw, url_prefix='/api/v1/ufw')
-app.register_blueprint(docker, url_prefix='/api/v1/docker')
+app.register_blueprint(docker_manager, url_prefix='/api/v1/docker')
 app.register_blueprint(pm, url_prefix='/api/v1/process')
 app.register_blueprint(file, url_prefix='/api/v1/file')
 app.register_blueprint(web, url_prefix='/api/v1/website')
