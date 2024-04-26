@@ -1,6 +1,6 @@
 from flask import jsonify
 from flask_cors import CORS
-from api.v1.login import login
+from api.v1.login import login, logout
 from decorators import auth
 from FlaskAppSingleton import FlaskAppSingleton
 from config import config
@@ -35,7 +35,7 @@ def handle_user_info():
 @app.route('/logout', endpoint='logout', methods=['GET'])
 @auth.login_required
 def handle_logout():
-    return jsonify({"message": "Logged out successfully"}), 200
+    return logout()
 
 
 if __name__ == '__main__':

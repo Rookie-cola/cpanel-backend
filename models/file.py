@@ -1,4 +1,5 @@
 import os
+import shutil
 import time
 
 from werkzeug.utils import secure_filename
@@ -41,6 +42,8 @@ class FileManager:
                 file_type = 'html'
             elif item.lower().endswith(('.png', '.jpg', '.jpeg')):
                 file_type = 'pic'
+            elif item.lower().endswith('.zip'):
+                file_type = 'zip'
             else:
                 file_type = "file"
 
@@ -68,10 +71,9 @@ class FileManager:
         return file_list
 
     def delete_file(self, path):
-        # 只删除指定的文件或目录，而不是整个路径
         try:
             if os.path.isfile(path) or os.path.isdir(path):
-                os.remove(path) if os.path.isfile(path) else os.rmdir(path)
+                os.remove(path) if os.path.isfile(path) else shutil.rmtree(path)
                 return {"status": "success", "message": f"Deleted {path}"}
             else:
                 return {"status": "error", "message": "File not found"}
@@ -90,3 +92,4 @@ class FileManager:
                 return {"status": "error", "message": str(e)}
         else:
             return {"status": "error", "message": "Invalid file name"}
+

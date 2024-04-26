@@ -1,4 +1,6 @@
 import os
+import zipfile
+
 import flask
 from flask import request, jsonify, Blueprint
 from decorators import auth
@@ -58,3 +60,18 @@ def handle_file():
             return jsonify(response)
         else:
             return jsonify({"status": "error", "message": "No file uploaded"}), 400
+
+
+# 解压文件
+@file.route('/unzip_file', endpoint='unzip', methods=['POST'])
+@auth.login_required
+def handle_unzip():
+    path = request.args.get('path')
+    if path and os.path.isfile(path):
+        f = zipfile.ZipFile(path, 'r')
+        f.extractall(path.replace(path.split('/')[-1], '')[:-1])
+        f.close()
+        return jsonify({"status": "success", "message": "File unzipped successfully"})
+    return jsonify({'status': 'error', 'message': 'error'})
+
+

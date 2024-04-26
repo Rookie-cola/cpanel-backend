@@ -24,7 +24,7 @@ def login():
             {"code": login_dict.invalid.status_code, "message": login_dict.invalid.message, "data": None}), 401
 
 
-@app.route('/logout', methods=['GET'])
+@app.route('/logout', methods=['POST'])
 @auth.login_required
 def logout():
     Tokens.query.filter_by(token=request.headers.get('Authorization').replace('Bearer ', '')).delete()
