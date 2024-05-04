@@ -38,15 +38,8 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS ufw_port
                  is_allowed BOOLEAN NOT NULL)''')
 
 
-# 创建一个nginx表
-cursor.execute('''CREATE TABLE IF NOT EXISTS nginx
-                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                 name VARCHAR(128) UNIQUE NOT NULL,
-                 port INTEGER NOT NULL)''')
-
-
-# 插入数据
-# cursor.execute("INSERT INTO users (username, password) VALUES (?,?)", ('admin', 'admin1234'))
+# 插入用户数据
+# cursor.execute("INSERT INTO users (username, password) VALUES (?,?)", ('admin', 'admin'))
 
 # 提交事务
 conn.commit()
