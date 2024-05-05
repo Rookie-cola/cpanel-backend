@@ -26,7 +26,7 @@ def handle_login():
 @app.route('/user/info', endpoint='user_info', methods=['GET'])
 def handle_user_info():
     return jsonify({"code": 200, "roles": ['admin'], "name": "name",
-                    "avatar": "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
+                    "avatar": "https://wpimg.wallstcn.com/57ed425a-c71e-4201-9428-68760c0537c4.jpg",
                     "introduction": "I am a super administrator"}), 200
 
 

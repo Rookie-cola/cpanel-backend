@@ -1,10 +1,8 @@
 import sqlite3
 
 
-# Connecting to the database
 conn = sqlite3.connect('database.db')
 
-# Creating a cursor object
 cursor = conn.cursor()
 
 
@@ -38,11 +36,10 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS ufw_port
                  is_allowed BOOLEAN NOT NULL)''')
 
 
-# 插入用户数据
-# cursor.execute("INSERT INTO users (username, password) VALUES (?,?)", ('admin', 'admin'))
+cursor.execute("INSERT INTO users (username, password) VALUES (?,?)", ('admin', 'admin'))
 
-# 提交事务
+
 conn.commit()
 
-# 关闭数据库连接
+
 conn.close()
