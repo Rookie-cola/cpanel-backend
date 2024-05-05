@@ -1,6 +1,4 @@
-import copy
 import gc
-from threading import Thread
 from time import sleep
 import _thread
 import psutil
@@ -8,7 +6,6 @@ from flask import request, jsonify, Blueprint
 from decorators import auth
 from models.process import ProcessManager
 from FlaskAppSingleton import FlaskAppSingleton
-from functions import SystemWatch
 
 app = FlaskAppSingleton().get_app()
 pm = Blueprint('pm', __name__)

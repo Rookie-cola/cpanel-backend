@@ -1,9 +1,7 @@
 import os
 import shutil
-
-import flask
 import nginx
-from flask import request, jsonify, abort, Blueprint
+from flask import request, jsonify, Blueprint
 from tldextract import tldextract
 
 from decorators import auth
