@@ -1,12 +1,19 @@
 # Linux 运维工具
 
+
+## 介绍
+
+本项目基于 Python 开发，主要用于 Linux 服务器的运维管理。
+
+
 ## 使用说明
 
 - 请先安装 `git` 工具
 - 克隆项目到本地：`git clone https://github.com/Rookie-cola/cpanel-backend.git`
 - 进入项目目录：`cd cpanel-backend`
 - 安装依赖：`pip install -r requirements.txt`
-- 运行项目：`python app.py`
+- 生成数据库：`python3 db.py`
+- 运行项目：`python3 app.py`
 - 配合前端项目一起使用，请访问 [前端项目](https://github.com/Rookie-cola/cpanel-frontend)
 
 ## 功能列表
